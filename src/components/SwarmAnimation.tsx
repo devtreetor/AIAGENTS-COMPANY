@@ -436,7 +436,9 @@ export default function SwarmAnimation() {
   function drawPhaseMarkers(ctx: CanvasRenderingContext2D, w: number, h: number, cx: number, cy: number) {
     const orbitR = Math.min(w, h) * CONFIG.orbitRadiusRatio;
     const labelR = orbitR + 48;
-    const markers = [
+    // Explicitly type to narrow 'phase' to the union so indexing phaseColorsRef.current works
+    type PhaseKey = "THINK" | "PLAN" | "ACT" | "OBSERVE";
+    const markers: { phase: PhaseKey; angle: number; label: string }[] = [
       { phase: "THINK", angle: -Math.PI / 2, label: "THINK" },
       { phase: "PLAN", angle: 0, label: "PLAN" },
       { phase: "ACT", angle: Math.PI / 2, label: "ACT" },
