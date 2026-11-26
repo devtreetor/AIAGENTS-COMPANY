@@ -183,7 +183,7 @@ export default function Features() {
               role="tab"
               aria-selected={activePhase === "ALL"}
               onClick={() => setActivePhase("ALL")}
-              className={`px-3 py-1.5 rounded-[var(--radius-md)] text-xs font-medium transition-all duration-200 whitespace-nowrap ${
+              className={`px-2.5 py-1.5 rounded-[var(--radius-md)] text-xs font-medium transition-all duration-200 whitespace-nowrap sm:px-3 ${
                 activePhase === "ALL"
                   ? "bg-[var(--fg)] text-[var(--bg)] shadow-[var(--shadow-sm)]"
                   : "bg-[var(--bg-elevated)] text-[var(--fg-muted)] hover:bg-[var(--bg-subtle)] hover:text-[var(--fg)] border border-[var(--border)]"
@@ -197,7 +197,7 @@ export default function Features() {
                 role="tab"
                 aria-selected={activePhase === phase}
                 onClick={() => setActivePhase(phase)}
-                className={`px-3 py-1.5 rounded-[var(--radius-md)] text-xs font-medium transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
+                className={`px-2.5 py-1.5 rounded-[var(--radius-md)] text-xs font-medium transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 sm:px-3 ${
                   activePhase === phase
                     ? "bg-[var(--fg)] text-[var(--bg)] shadow-[var(--shadow-sm)]"
                     : "bg-[var(--bg-elevated)] text-[var(--fg-muted)] hover:bg-[var(--bg-subtle)] hover:text-[var(--fg)] border border-[var(--border)]"
@@ -255,14 +255,14 @@ export default function Features() {
             <div
               ref={animationRef}
               className="relative flex-shrink-0 z-50"
-              style={{ width: ANIMATION_SIZE, height: ANIMATION_SIZE }}
+              style={{ width: isMobile ? "100%" : ANIMATION_SIZE, height: isMobile ? "100%" : ANIMATION_SIZE, maxWidth: isMobile ? "280px" : ANIMATION_SIZE }}
             >
               <SwarmAnimation />
             </div>
 
             {/* Mobile: Cards below animation */}
             {isMobile && (
-              <div className="w-full mt-8 grid grid-cols-2 gap-3">
+              <div className="w-full mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {filteredCapabilities.map((cap, index) => (
                   <CapabilityCard
                     key={cap.id}
@@ -271,6 +271,7 @@ export default function Features() {
                     onMouseEnter={() => setHighlightedId(cap.id)}
                     onMouseLeave={() => setHighlightedId(null)}
                     index={index}
+                    isMobile={true}
                   />
                 ))}
               </div>
@@ -306,12 +307,14 @@ function CapabilityCard({
   onMouseEnter,
   onMouseLeave,
   index,
+  isMobile = false,
 }: {
   capability: typeof capabilities[0];
   isHighlighted: boolean;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   index: number;
+  isMobile?: boolean;
 }) {
   const Icon = capability.icon;
   const delay = index * 50;
@@ -320,8 +323,8 @@ function CapabilityCard({
     <article
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className={`relative rounded-[var(--radius-lg)] border transition-all duration-300 overflow-hidden group ${capability.border} ${isHighlighted ? "ring-2 ring-[var(--accent)]/30 z-20" : "hover:border-[var(--border-strong)]"} bg-[var(--bg-elevated)]/50 backdrop-blur-sm`}
-      style={{ width: CARD_WIDTH, animationDelay: `${delay}ms` }}
+      className={`relative rounded-[var(--radius-lg)] border transition-all duration-300 overflow-hidden group ${capability.border} ${isHighlighted ? "ring-2 ring-[var(--accent)]/30 z-20" : "hover:border-[var(--border-strong)]"} bg-[var(--bg-elevated)]/50 backdrop-blur-sm ${isMobile ? "w-full" : ""}`}
+      style={{ width: isMobile ? undefined : CARD_WIDTH, animationDelay: `${delay}ms` }}
       role="listitem"
       tabIndex={0}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onMouseEnter(); } }}
